@@ -55,7 +55,7 @@ namespace HospitalesSaludIntegral.Datos
 
         public void MtdActualizarUsuarios(int CodigoUsuario, int CodigoEmpleado, string Usuario, string Clave, string TipoUsuario, string Estado, DateTime FechaAuditoria, string UsuarioAuditoria)
         {
-            string QueryActualizar = "Update tbl_Usuarios set CodigoUsuario=@CodigoUsuario, CodigoEmpleado=@CodigoEmpleado, Usuario=@Usuario, Clave=@Clave, TipoUsuario=@TipoUsuario, Estado=@Estado, FechaAuditoria=@FechaAuditoria, UsuarioAuditoria=@UsuarioAuditoria where CodigoUsuario=@CodigoUsuario";
+            string QueryActualizar = "Update tbl_Usuarios set CodigoEmpleado=@CodigoEmpleado, Usuario=@Usuario, Clave=@Clave, TipoUsuario=@TipoUsuario, Estado=@Estado, FechaAuditoria=@FechaAuditoria, UsuarioAuditoria=@UsuarioAuditoria where CodigoUsuario=@CodigoUsuario";
             SqlCommand cmd = new SqlCommand(QueryActualizar, cd_conexion.MtdAbrirConexion());
             cmd.Parameters.AddWithValue("@CodigoUsuario", CodigoUsuario);
             cmd.Parameters.AddWithValue("@CodigoEmpleado", CodigoEmpleado);
@@ -69,14 +69,37 @@ namespace HospitalesSaludIntegral.Datos
             cd_conexion.MtdCerrarConexion();
         }
 
-        public void MtdEliminarProveedores(int CodigoUsuario)
+        public void MtdEliminarUsuarios(int CodigoUsuario)
         {
-            string QueryEliminar = "Delete from tbl_Usuario where CodigoUsuario=@CodigoUsuario";
+            string QueryEliminar = "Delete from tbl_Usuarios where CodigoUsuario=@CodigoUsuario";
             SqlCommand cmd = new SqlCommand(QueryEliminar, cd_conexion.MtdAbrirConexion());
             cmd.Parameters.AddWithValue("@CodigoUsuario", CodigoUsuario);
             cmd.ExecuteNonQuery();
             cd_conexion.MtdCerrarConexion();
         }
+
+        public bool MtdUsuarioExistente(int codigoEmpleado) //Valida si ya el empleado ya tiene usuario
+        {
+            SqlConnection conexion = cd_conexion.MtdAbrirConexion();
+            
+                string query = "SELECT COUNT(*) FROM tbl_Usuarios WHERE CodigoEmpleado = @CodigoEmpleado"; //cuenta cuantas filas hay con el mismo valor de CodigoEmpleado
+                cd_conexion.MtdAbrirConexion();
+                SqlCommand cmd = new SqlCommand(query, conexion);
+                cmd.Parameters.AddWithValue("@CodigoEmpleado", codigoEmpleado);
+                int count = (int)cmd.ExecuteScalar();
+                cd_conexion.MtdCerrarConexion();
+
+                if (count > 0)
+                {
+                    return true; //Ya tiene usuario
+                }
+                else
+                {
+                    return false; //No tiene usuario
+                }
+
+        }
+
 
     }
 }

@@ -42,7 +42,7 @@ namespace HospitalesSaludIntegral
             tblEmpleados.Rows.InsertAt(filaVacia, 0);
 
             cboxCodigoEmpleado.DataSource = tblEmpleados; // Asignamos la tabla tblEmpleados al ComboBox
-            cboxCodigoEmpleado.DisplayMember = "Nombres"; //Se muestan los nombre pero el valor será el código del empleado
+            cboxCodigoEmpleado.DisplayMember = "Nombres"; //Se muestan los nombre pero rl valor interno es el codigo del empleado
             cboxCodigoEmpleado.ValueMember = "CodigoEmpleado";
             cboxCodigoEmpleado.SelectedIndex = 0;   // Selecciona la fila vacía por defecto
         }
@@ -82,6 +82,12 @@ namespace HospitalesSaludIntegral
             }
             else
             {
+                if (cd_usuarios.MtdUsuarioExistente(Convert.ToInt32(cboxCodigoEmpleado.SelectedValue))) //Valida que no tenga usuario
+                {
+                    MessageBox.Show("El empleado ya tiene un usuario asignado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 int CodigoEmpleado = Convert.ToInt32(cboxCodigoEmpleado.SelectedValue);
                 string Usuario = txtusuario.Text;
                 string Clave = txtpassword.Text;
@@ -140,12 +146,81 @@ namespace HospitalesSaludIntegral
             }
             else
             {
-                txtCodigoUsuario.Text = FilaSeleccionada.Cells["Usuario"].Value.ToString();
+                txtCodigoUsuario.Text = FilaSeleccionada.Cells["CodigoUsuario"].Value.ToString();
                 txtpassword.Text = FilaSeleccionada.Cells["Clave"].Value.ToString();
                 cboxTipoUsuario.Text = FilaSeleccionada.Cells["TipoUsuario"].Value.ToString();
                 cboxEstado.Text = FilaSeleccionada.Cells["Estado"].Value.ToString();
                 txtusuario.Text = FilaSeleccionada.Cells["Usuario"].Value.ToString();
                 cboxCodigoEmpleado.SelectedValue = Convert.ToInt32(FilaSeleccionada.Cells["CodigoEmpleado"].Value);
+            }
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(cboxTipoUsuario.Text) || string.IsNullOrEmpty(cboxEstado.Text) || cboxCodigoEmpleado.SelectedIndex <= 0 || string.IsNullOrEmpty(txtpassword.Text) || string.IsNullOrEmpty(txtCodigoUsuario.Text))
+            {
+
+                Validartxt(txtusuario);
+                Validartxt(txtpassword);
+                Validarcbox(cboxTipoUsuario);
+                Validarcbox(cboxEstado);
+                Validarcbox(cboxCodigoEmpleado);
+
+                if (string.IsNullOrEmpty(txtCodigoUsuario.Text))
+                {
+                    MessageBox.Show("Favor seleccionar la fila a editar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Favor completar formulario", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                try
+                {
+                    int CodigoUsuario = Convert.ToInt32(txtCodigoUsuario.Text);
+                    int CodigoEmpleado = Convert.ToInt32(cboxCodigoEmpleado.SelectedValue);
+                    string Usuario = txtusuario.Text;
+                    string Clave = txtpassword.Text;
+                    string TipoUsuario = cboxTipoUsuario.Text;
+                    string Estado = cboxEstado.Text;
+                    DateTime FechaAuditoria = cl_usuarios.MtdFechaHoy();
+                    string UsuarioAuditoria = "Admin";
+
+                    cd_usuarios.MtdActualizarUsuarios(CodigoUsuario,CodigoEmpleado, Usuario, Clave, TipoUsuario, Estado, FechaAuditoria, UsuarioAuditoria);
+                    MessageBox.Show("Datos Actualizados Correctamente", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MtdConsultarUsuarios();
+                    MtdLimpiarCampos();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtCodigoUsuario.Text))
+            {
+                MessageBox.Show("Favor seleccionar fila a eliminar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                int CodigoUsuario = int.Parse(txtCodigoUsuario.Text);
+
+                try
+                {
+                    cd_usuarios.MtdEliminarUsuarios(CodigoUsuario);
+                    MessageBox.Show("Datos eliminados correctamente", "Correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MtdConsultarUsuarios();
+                    MtdLimpiarCampos();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
