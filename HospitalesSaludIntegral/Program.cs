@@ -16,7 +16,7 @@ namespace HospitalesSaludIntegral
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmPagoCitas());
+            Application.Run(new frmUsuarios());
         }
     }
 }
