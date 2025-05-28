@@ -54,9 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datos\CDconexion.cs" />
+    <Compile Include="Datos\CDmedicamentos.cs" />
     <Compile Include="Datos\CDpagocitas.cs" />
     <Compile Include="Datos\CDpagoplanilla.cs" />
     <Compile Include="Datos\CDusuarios.cs" />
+    <Compile Include="Logica\CLmedicamentos.cs" />
+    <Compile Include="Logica\CLpagocitas.cs" />
     <Compile Include="Logica\CLpagoplanilla.cs" />
     <Compile Include="Presentacion\frmMedicamentos.cs">
       <SubType>Form</SubType>

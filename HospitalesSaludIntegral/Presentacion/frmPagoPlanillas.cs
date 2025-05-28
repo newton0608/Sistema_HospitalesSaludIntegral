@@ -28,7 +28,6 @@ namespace HospitalesSaludIntegral.Presentacion
             lblFecha.Text = cl_pagoplanilla.MtdFechaHoy().ToString("d");
             MtdConsultarPagoPlanilla(); //carga los datos al dgv
             CargarCboxEmpleadosCodigo(); //carga los datos al cbox de los nombre
-           // CargarCboxEmpleadosCodigo(); //carga los datos al cbox de los codigos
         }
         private void CargarCboxEmpleadosCodigo()
         {

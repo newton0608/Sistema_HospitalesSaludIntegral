@@ -17,7 +17,7 @@ namespace HospitalesSaludIntegral
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmPagoPlanillas());
+            Application.Run(new frmMedicamentos());
         }
     }
 }
