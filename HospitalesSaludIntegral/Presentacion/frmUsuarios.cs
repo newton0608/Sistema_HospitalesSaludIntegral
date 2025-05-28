@@ -25,26 +25,47 @@ namespace HospitalesSaludIntegral
         {
             lblFecha.Text = cl_usuarios.MtdFechaHoy().ToString("d");
             MtdConsultarUsuarios(); //carga los datos al dgv
-            CargarCboxEmpleados();  //carga el cboxEmpleados
+            CargarCboxEmpleadosCodigo();  //carga el cboxEmpleados
             cboxEstado.SelectedIndex = 0; // Selecciona la fila vacía por defecto en el ComboBox Estado
             cboxTipoUsuario.SelectedIndex = 0; // Selecciona la fila vacía por defecto en el ComboBox TipoUsuario
 
         }
 
-        private void CargarCboxEmpleados() //carga los datos al cbox
+        private void CargarCboxEmpleadosCodigo()
         {
-            DataTable tblEmpleados = cd_usuarios.MtdConsultarEmpleados();
+            //Primero se obtiene la tabla original de empleados
+            DataTable tblOriginal = cd_usuarios.MtdConsultarEmpleados();
 
-            // Fila vacía al inicio para que aparezca en blanco el cbox
-            DataRow filaVacia = tblEmpleados.NewRow(); // Crea la fila vacia
-            filaVacia["CodigoEmpleado"] = 0;
-            filaVacia["Nombres"] = "Seleccione...";
-            tblEmpleados.Rows.InsertAt(filaVacia, 0);
+            //Se crea una nueva tabla
+            DataTable tblEmpleados = new DataTable();
+            tblEmpleados.Columns.Add("CodigoEmpleado", typeof(int));
+            tblEmpleados.Columns.Add("Nombres", typeof(string));
+            tblEmpleados.Columns.Add("Mostrar", typeof(string)); // columna para mostrar
 
-            cboxCodigoEmpleado.DataSource = tblEmpleados; // Asignamos la tabla tblEmpleados al ComboBox
-            cboxCodigoEmpleado.DisplayMember = "Nombres"; //Se muestan los nombre pero rl valor interno es el codigo del empleado
-            cboxCodigoEmpleado.ValueMember = "CodigoEmpleado";
-            cboxCodigoEmpleado.SelectedIndex = 0;   // Selecciona la fila vacía por defecto
+            //Agregamos la fila "Seleccione..."
+            DataRow filaVacia = tblEmpleados.NewRow();
+            filaVacia["CodigoEmpleado"] = -1;
+            filaVacia["Nombres"] = "";
+            filaVacia["Mostrar"] = "Seleccione...";
+            tblEmpleados.Rows.Add(filaVacia);
+
+            //Por [ultimo , se recorre la tabla original y se llena la nueva tabla con los datos de esta 
+            foreach (DataRow row in tblOriginal.Rows)
+            {
+                DataRow newRow = tblEmpleados.NewRow();
+                int codigo = Convert.ToInt32(row["CodigoEmpleado"]);
+                string nombre = row["Nombres"].ToString();
+                newRow["CodigoEmpleado"] = codigo;
+                newRow["Nombres"] = nombre;
+                newRow["Mostrar"] = $"{codigo} - {nombre}";
+                tblEmpleados.Rows.Add(newRow);
+            }
+
+            // Cargar en el ComboBox
+            cboxCodigoEmpleado.DataSource = tblEmpleados;
+            cboxCodigoEmpleado.DisplayMember = "Mostrar";// lo que se muestra en el cbox
+            cboxCodigoEmpleado.ValueMember = "CodigoEmpleado";// el valor del cbox
+            cboxCodigoEmpleado.SelectedIndex = 0;
         }
 
         private void MtdConsultarUsuarios()
@@ -127,7 +148,7 @@ namespace HospitalesSaludIntegral
             txtpassword.Clear();
             cboxTipoUsuario.SelectedIndex = 0;
             cboxEstado.SelectedIndex = 0;
-            txtusuario.Focus(); // Coloca el cursor en el primer campo de texto
+            cboxCodigoEmpleado.Focus(); // Coloca el cursor en el primer campo de texto
             txtCodigoUsuario.Clear();
         }
 
@@ -222,6 +243,16 @@ namespace HospitalesSaludIntegral
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void txtCodigoUsuario_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cboxCodigoEmpleado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

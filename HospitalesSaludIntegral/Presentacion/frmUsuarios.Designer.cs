@@ -137,6 +137,7 @@
             this.txtCodigoUsuario.ReadOnly = true;
             this.txtCodigoUsuario.Size = new System.Drawing.Size(160, 24);
             this.txtCodigoUsuario.TabIndex = 21;
+            this.txtCodigoUsuario.TextChanged += new System.EventHandler(this.txtCodigoUsuario_TextChanged);
             // 
             // label3
             // 
@@ -163,6 +164,7 @@
             this.cboxCodigoEmpleado.Name = "cboxCodigoEmpleado";
             this.cboxCodigoEmpleado.Size = new System.Drawing.Size(160, 26);
             this.cboxCodigoEmpleado.TabIndex = 19;
+            this.cboxCodigoEmpleado.SelectedIndexChanged += new System.EventHandler(this.cboxCodigoEmpleado_SelectedIndexChanged);
             // 
             // btnCancelar
             // 

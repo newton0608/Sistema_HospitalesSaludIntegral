@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalesSaludIntegral.Presentacion;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace HospitalesSaludIntegral
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmUsuarios());
+            Application.Run(new frmPagoPlanillas());
         }
     }
 }

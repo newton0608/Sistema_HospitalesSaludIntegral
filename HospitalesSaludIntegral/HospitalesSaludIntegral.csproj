@@ -55,7 +55,15 @@
   <ItemGroup>
     <Compile Include="Datos\CDconexion.cs" />
     <Compile Include="Datos\CDpagocitas.cs" />
+    <Compile Include="Datos\CDpagoplanilla.cs" />
     <Compile Include="Datos\CDusuarios.cs" />
+    <Compile Include="Logica\CLpagoplanilla.cs" />
+    <Compile Include="Presentacion\frmMedicamentos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\frmMedicamentos.Designer.cs">
+      <DependentUpon>frmMedicamentos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\frmPagoCitas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Presentacion\frmMedicamentos.resx">
+      <DependentUpon>frmMedicamentos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\frmPagoCitas.resx">
       <DependentUpon>frmPagoCitas.cs</DependentUpon>
     </EmbeddedResource>
